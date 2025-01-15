@@ -50,6 +50,9 @@ if scribus.selectionCount() > 1:
     sys.exit(1)
 
 replacements = (
+    # Sezzjonijiet ġodda
+    ('\u000d' + '\u0023' + '\u000d', '\u000d' + '\u000d'),
+
     # Artikli
     (r' il-', ' il\u2011'),
     (r' l-', ' l\u2011'),
@@ -110,7 +113,7 @@ replacements = (
     ('\u000d' + '\u0020' + r'+', '\u000d'),
 
     # double carriage return to carriage return
-    ('\u000d' + '\u000d' + r'+', '\u000d'),
+    # ('\u000d' + '\u000d' + r'+', '\u000d'),
 
     # remove extra spaces from start and end of a text
     (r'^' + '\u0020' + r'|' + '\u0020' + r'$', ''),
@@ -118,31 +121,25 @@ replacements = (
     # three full stops to ellipsis
     (r'\.\.\.+', '\u2026'),
 
-# CHANGE TO NON_BREAKING
     # add narrow spaces to em dash
-    ('\u2014', '\u2009' + '\u2014' + '\u2009'),
+    ('\u2014', '\u202f' + '\u200b' + '\u2014' + '\u200b' + '\u202f'),
 
     # clean up double narrow spaces
     ('\u2009' + '\u2009', '\u2009'),
 
-    # clean up double new lines
-    ('\u000d' + '\u000d' + r'+', '\u000d'),
-
     # double space to single space
     ('\u0020' + '\u0020' + r'+', '\u0020'),
 
-# THIS WAS THE PROBLEM!!!
     # tab and non breaking space to single space
-#    ('\u0009', ''),
+    ('\u0009', '\u0020'),
 
-# Add non-breaking narrow space before and after slash
-# add zero-width spaces if you want them to be able to break line without hyphen
+    # add narrow spaces to em dash
+    ('\u2044', '\u200b' + '\u2044' + '\u200b'),
 
-# add spaces instead of commas
+		# add hair space to slash, replace normal spaces
+    ('/', '\u200a' + '/' + '\u0020'),
+    ('\u0020' + r'+' + '/' + '\u0020' + r'+', '\u200a' + '/' + '\u0020'),
 
-)
-
-sectionRestartReplacements = (
     # find and replace hash+new line+hash+new line with new line
     ('\u000d' + '\u0023' + '\u000d', '\u000d'),
 )
@@ -172,38 +169,4 @@ else:
         print(f'IndexError: {e}')
         sys.exit(1)
 
-# scribus.deselectAll()
-# scribus.setStyle('Aphroconfuso: Default body text')
-# scribus.setFontSize('9.80 pt')
-# scribus.deselectAll()
-# scribus.selectText(0, 1, d)
-# scribus.setStyle('Aphroconfuso: Section start', d)
-# scribus.deselectAll()
-
-if scribus.getObjectType(d) != 'TextFrame':
-    scribus.messageBox('Warning', 'You should select a text frame.', scribus.ICON_WARNING, scribus.BUTTON_OK)
-    sys.exit(1)
-else:
-    try:
-        for item in sectionRestartReplacements:
-            content = scribus.getAllText(d)
-            print(f'Processing replacement: {item}')
-            p = re.compile(item[0])
-            r = re.finditer(p, content) # , re.IGNORECASE
-            for i in reversed(tuple(r)):
-                count = i.end() - i.start()
-                print(f'Found match at {i.start()} to {i.end()}, length {count}')
-                scribus.selectText(i.start(), count, d)
-                print(f'Selected text from {i.start()} for {count} characters')
-                scribus.deleteText(d)
-                print(f'Deleted text from {i.start()}')
-                scribus.insertText(item[1], i.start(), d)
-                scribus.selectText(i.start()+10, 10, d)
-                scribus.setStyle('Aphroconfuso: Section restart', d)
-                scribus.deselectAll()
-                print(f'Inserted "{item[1]}" at {i.start()}')
-    except IndexError as e:
-        print(f'IndexError: {e}')
-        sys.exit(1)
-
-scribus.messageBox('Done', 'Aphroconfuso clean-up done.', scribus.ICON_WARNING, scribus.BUTTON_OK)
+scribus.messageBox('Lest!', 'Aphroconfuso: it-tindif lest!', scribus.ICON_WARNING, scribus.BUTTON_OK)
