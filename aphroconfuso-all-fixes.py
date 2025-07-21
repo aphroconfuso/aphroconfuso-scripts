@@ -50,10 +50,10 @@ if scribus.selectionCount() > 1:
     sys.exit(1)
 
 replacements = (
-    # Sezzjonijiet ġodda
-    ('\u000d' + '\u0023' + '\u000d', '\u000d' + '\u000d'),
-
     # Artikli
+    (r' ’l ', ' ’l\u00a0'),
+    (r' ’l-', ' ’l\u2011'),
+
     (r' il-', ' il\u2011'),
     (r' l-', ' l\u2011'),
 
@@ -113,7 +113,7 @@ replacements = (
     ('\u000d' + '\u0020' + r'+', '\u000d'),
 
     # double carriage return to carriage return
-    # ('\u000d' + '\u000d' + r'+', '\u000d'),
+    ('\u000d' + '\u000d' + r'+', '\u000d'),
 
     # remove extra spaces from start and end of a text
     (r'^' + '\u0020' + r'|' + '\u0020' + r'$', ''),
@@ -140,8 +140,21 @@ replacements = (
     ('/', '\u200a' + '/' + '\u0020'),
     ('\u0020' + r'+' + '/' + '\u0020' + r'+', '\u200a' + '/' + '\u0020'),
 
-    # find and replace hash+new line+hash+new line with new line
-    ('\u000d' + '\u0023' + '\u000d', '\u000d'),
+    # Sezzjonijiet ġodda
+    ('\u0023' + '\u0020', '\u0023'),
+    ('\u000d' + '\u0023' + '\u000d', '\u000d' + '\u0023' + '\u0020'),
+    ('\u000d' + '\u000d', '\u000d'),
+    ('\u000d' + '\u0023', '\u000d' + '\u000d' + '\u0023'),
+
+
+		# ADD
+		#  ’l => add thin space before and nbsp after
+		#  ’l- => add thin space before
+    #      ’’ also add thin space
+    # [ ’] add thin space before
+
+
+		# make one for ragged; all nb hyphens, and no one- or two-letter words at the end of a line
 )
 
 d = scribus.getSelectedObject()
