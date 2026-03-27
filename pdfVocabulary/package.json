@@ -1,0 +1,17 @@
+{
+  "name": "pdf-vocabulary",
+  "version": "1.0.0",
+  "description": "Script to extract unique words from a PDF document",
+  "main": "index.js",
+  "scripts": {
+    "start": "node pdfVocabulary.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "pdf-lib": "^1.17.1",
+    "pdf-parse": "^1.1.1",
+    "stopword": "^0.3.2"
+  }
+}
