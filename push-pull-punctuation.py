@@ -1,3 +1,8 @@
+# remaining:
+# - smallcaps
+
+
+
 import scribus
 
 STYLE_BEFORE = "Aphroconfuso: pull quote"
